@@ -4,17 +4,33 @@
       <router-link to="/">Home</router-link> |
       <router-link to="/about">About</router-link>
     </div>
-    <router-view />
+    <div id="content">
+      <router-view />
+    </div>
   </div>
 </template>
 
 <style lang="scss">
+html {
+  height: 100%;
+}
+
+body {
+  padding: 0;
+  margin: 0;
+  height: 100%;
+}
+
 #app {
   font-family: Avenir, Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
   color: #2c3e50;
+
+  display: grid;
+  grid-template-rows: auto 1fr;
+  height: 100%;
 }
 
 #nav {
@@ -28,5 +44,9 @@
       color: #42b983;
     }
   }
+}
+
+#content {
+  display: grid;
 }
 </style>
