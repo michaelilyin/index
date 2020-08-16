@@ -1,0 +1,77 @@
+apiVersion: networking.k8s.io/v1beta1
+kind: Ingress
+metadata:
+  namespace: kiss-cloud
+  name: index-kiss-cloud-ingress
+  annotations:
+    nginx.ingress.kubernetes.io/rewrite-target: $1
+    kubernetes.io/ingress.class: nginx
+    cert-manager.io/cluster-issuer: letsencrypt-prod
+  labels:
+    app: index
+spec:
+  tls:
+    - hosts:
+        - michaelilyin.ru
+      secretName: index-tls
+  rules:
+    - host: michaelilyin.ru
+      http:
+        paths:
+          - path: ($|.*)
+            backend:
+              serviceName: index
+              servicePort: 4000
+
+
+---
+
+
+#####
+# Web Service
+#####
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  namespace: kiss-cloud
+  labels:
+    app: index
+  name: index
+spec:
+  replicas: 1
+  revisionHistoryLimit: 2
+  selector:
+    matchLabels:
+      app: index
+  strategy:
+    type: RollingUpdate
+  template:
+    metadata:
+      namespace: kiss-cloud
+      labels:
+        app: index
+    spec:
+      containers:
+      - image: michaelilyin/index:latest
+        imagePullPolicy: Always
+        name: kiss-cloud-web
+        env:
+          - name: API
+            value: "cl.michaelilyin.ru/index-api"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  namespace: kiss-cloud
+  labels:
+    app: index
+  name: index
+spec:
+  ports:
+  - name: 4000-4000
+    port: 4000
+    protocol: TCP
+    targetPort: 4000
+  selector:
+    app: index
+  type: ClusterIP

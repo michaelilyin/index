@@ -2,6 +2,7 @@ import Vue from "vue";
 import VueRouter, { RouteConfig } from "vue-router";
 import Home from "../views/Home.vue";
 import Schedule from "@/views/Schedule.vue";
+import Test from "@/views/Test.vue";
 
 Vue.use(VueRouter);
 
@@ -15,6 +16,11 @@ const routes: Array<RouteConfig> = [
     path: "/schedule",
     name: "Schedule",
     component: Schedule
+  },
+  {
+    path: "/test",
+    name: "Test",
+    component: Test
   },
   {
     path: "/about",
