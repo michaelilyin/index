@@ -44,8 +44,6 @@
 import Vue from "vue";
 import { CalendarTimestamp } from "vuetify";
 import { DateTime } from "luxon";
-import CalendarToolbar from "@/components/calendar/CalendarToolbar.vue";
-import ScheduleCalendar from "@/components/calendar/ScheduleCalendar.vue";
 import {
   CalendarChangeEvent,
   CalendarEvent,
@@ -213,8 +211,7 @@ export default Vue.component<Data, Methods, Computed, {}>("schedule", {
 
       this.cal?.scrollToTime(first);
     }
-  },
-  components: { CalendarToolbar, ScheduleCalendar }
+  }
 });
 </script>
 

@@ -42,9 +42,9 @@ interface Data {
   weekday: number[];
   type: string;
   mode: string;
-  //   ready: boolean;
   //   interval: number | null;
   focus: string;
+  ready: boolean;
 }
 
 interface Computed {
@@ -59,12 +59,14 @@ export default Vue.component<Data, {}, Computed, {}>("schedule-calendar", {
     weekday: [1, 2, 3, 4, 5],
     type: "week",
     mode: "stack",
-    focus: ""
+    focus: "",
+    ready: false
   }),
   computed: {
     cal(): VCalendar | null {
-      return ((this.$refs as unknown) as { calendar: VCalendar | null })
-        .calendar;
+      return this.ready
+        ? ((this.$refs as unknown) as { calendar: VCalendar }).calendar
+        : null;
     },
     nowY(): string {
       return this.cal?.timeToY(this.cal?.times.now ?? "-10") + "px";
@@ -74,6 +76,11 @@ export default Vue.component<Data, {}, Computed, {}>("schedule-calendar", {
     },
     presentOVerlayHeight(): string {
       return this.cal?.timeToY(this.cal?.times.now ?? "0") + "px";
+    }
+  },
+  methods: {
+    title(): string {
+      return "";
     }
   },
   components: { CalendarPastOverlay, CalendarPresentLine }
