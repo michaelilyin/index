@@ -3,7 +3,7 @@ WORKDIR /opt/index
 
 ADD ./src ./src
 ADD ./public ./public
-ADD ./.browserlist ./.browserlist
+ADD ./.browserslistrc ./.browserslistrc
 ADD ./babel.config.js ./babel.config.js
 ADD ./package.json ./package.json
 ADD ./package-lock.json ./package-lock.json
