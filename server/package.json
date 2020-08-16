@@ -16,12 +16,13 @@
     "eslint": "^7.7.0",
     "eslint-plugin-import": "^2.22.0",
     "nodemon": "^2.0.4",
-    "ts-node": "^8.10.2"
+    "ts-node": "^8.10.2",
+    "typescript": "^3.9.7"
   },
   "dependencies": {
     "express": "^4.17.1",
     "path": "^0.12.7",
-    "typescript": "^3.9.7"
+    "tslib": "^2.0.1"
   },
   "nodemonConfig": {
     "ignore": [
