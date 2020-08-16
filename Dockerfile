@@ -33,7 +33,7 @@ FROM node:12
 WORKDIR /opt/index
 COPY --from=build-client /opt/index/dist ./public
 COPY --from=build-server /opt/index/node_modules ./node_modules
-COPY --from=build-server /opt/index/src/**/*.js ./
+COPY --from=build-server /opt/index/src/*.js ./
 
 RUN ls -l
 
