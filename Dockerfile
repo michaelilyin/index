@@ -1,8 +1,14 @@
 FROM node:12 AS build-client
 WORKDIR /opt/index
 
-ADD ./* ./
 ADD ./src ./src
+ADD ./public ./public
+ADD ./.browserlist ./.browserlist
+ADD ./babel.config.js ./babel.config.js
+ADD ./package.json ./package.json
+ADD ./package-lock.json ./package-lock.json
+ADD ./tsconfig.json ./tsconfig.json
+ADD ./vue.config.js ./vue.config.js
 
 RUN npm set progress=false && npm config set depth 0
 RUN npm install

@@ -8,8 +8,8 @@ cache: npm
 services:
   - docker
 
-install:
-  - npm ci
+# install:
+#   - npm ci
 
 script:
   - docker build -t michaelilyin/index:latest .
