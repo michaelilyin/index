@@ -9,6 +9,7 @@ ADD ./package.json ./package.json
 ADD ./package-lock.json ./package-lock.json
 ADD ./tsconfig.json ./tsconfig.json
 ADD ./vue.config.js ./vue.config.js
+ADD ./.eslintrc.js ./.eslintrc.js
 
 RUN npm set progress=false && npm config set depth 0
 RUN npm install
