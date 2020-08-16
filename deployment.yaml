@@ -4,7 +4,7 @@ metadata:
   namespace: kiss-cloud
   name: index-kiss-cloud-ingress
   annotations:
-    nginx.ingress.kubernetes.io/rewrite-target: $1
+    nginx.ingress.kubernetes.io/rewrite-target: /$1
     kubernetes.io/ingress.class: nginx
     cert-manager.io/cluster-issuer: letsencrypt-prod
   labels:
@@ -18,7 +18,7 @@ spec:
     - host: michaelilyin.ru
       http:
         paths:
-          - path: ($|.*)
+          - path: /($|.*)
             backend:
               serviceName: index
               servicePort: 4000
