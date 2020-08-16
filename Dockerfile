@@ -16,10 +16,10 @@ RUN npm install
 RUN npm run build
 
 FROM node:12 AS build-server
-WORKDIR /opt/index
 
-ADD ./server/* ./
-ADD ./server/src/* ./src
+ADD ./server /opt/index
+
+WORKDIR /opt/index
 
 RUN npm set progress=false && npm config set depth 0
 RUN npm install
