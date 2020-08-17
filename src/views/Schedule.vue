@@ -1,7 +1,12 @@
 <template>
   <div class="schedule-container">
-    <calendar-toolbar></calendar-toolbar>
-    <schedule-calendar class="schedule-calendar"></schedule-calendar>
+    <calendar-toolbar :title="title"></calendar-toolbar>
+    <schedule-calendar
+      :events="events"
+      @period-change="getEvents"
+      @title-change="setTitle"
+      class="schedule-calendar"
+    ></schedule-calendar>
     <!-- <v-calendar
       ref="calendar"
       class="schedule-calendar"
@@ -53,38 +58,31 @@ import {
 import { ApiEvent } from "@/models/api/event.model";
 import { AppStore, moduleActionContext, rootActionContext } from "@/store";
 import store from "@/store";
+import ScheduleCalendar from "@/components/calendar/ScheduleCalendar.vue";
+import CalendarToolbar from "@/components/calendar/CalendarToolbar.vue";
+import { CalendarActions } from "@/store/calendar";
 
 interface Data {
   weekday: number[];
   type: string;
   mode: string;
-  ready: boolean;
   interval: number | null;
   focus: string;
+  title: string;
 }
 
 interface Methods {
-  scrollToTime(): void;
-  getCurrentTime(): number;
   getEventColor(event: CalendarEvent): string;
   next(): void;
   prev(): void;
   setToday(): void;
-  stopUpdateTime(): void;
-  updateTime(): void;
-  intervalStyle(
-    interval: CalendarTimestamp
-  ): Record<string, string | undefined>;
   getEvents(params: CalendarChangeEvent): void;
+  setTitle(title: string): void;
 }
 
 interface Computed {
   cal: VCalendar | null;
-  nowY: string;
-  locale: string;
-  presentOverlayHeight: string;
   events: CalendarEvent[];
-  title: string;
 }
 
 export default Vue.component<Data, Methods, Computed, {}>("schedule", {
@@ -94,21 +92,13 @@ export default Vue.component<Data, Methods, Computed, {}>("schedule", {
     mode: "stack",
     ready: false,
     interval: null,
-    focus: ""
+    focus: "",
+    title: ""
   }),
   computed: {
     cal(): VCalendar | null {
       return ((this.$refs as unknown) as { calendar: VCalendar | null })
         .calendar;
-    },
-    nowY(): string {
-      return this.cal?.timeToY(this.cal?.times.now ?? "-10") + "px";
-    },
-    locale(): string {
-      return this.$vuetify.lang.current;
-    },
-    presentOverlayHeight(): string {
-      return this.cal?.timeToY(this.cal?.times.now ?? "0") + "px";
     },
     events(): CalendarEvent[] {
       return (
@@ -126,22 +116,7 @@ export default Vue.component<Data, Methods, Computed, {}>("schedule", {
           return event;
         }) ?? []
       );
-    },
-    title(): string {
-      if (this.ready) {
-        return this.cal?.title ?? "";
-      } else {
-        return "";
-      }
     }
-  },
-  mounted() {
-    this.ready = true;
-    this.scrollToTime();
-    this.updateTime();
-  },
-  destroyed() {
-    this.stopUpdateTime();
   },
   methods: {
     getEvents(params: CalendarChangeEvent): void {
@@ -153,33 +128,6 @@ export default Vue.component<Data, Methods, Computed, {}>("schedule", {
         .toISO() as string;
 
       (store.dispatch.calendar as any).loadEvents({ from, to });
-    },
-
-    intervalStyle(
-      interval: CalendarTimestamp
-    ): Record<string, string | undefined> {
-      const inactive =
-        interval.weekday === 0 ||
-        interval.weekday === 6 ||
-        interval.hour < 10 ||
-        interval.hour >= 19;
-      const startOfHour = interval.minute === 0;
-      const mid = "rgba(0,0,0,0.1)";
-
-      return {
-        backgroundColor: inactive ? "rgba(0,0,0,0.05)" : undefined,
-        borderTop: startOfHour ? undefined : "1px dashed " + mid
-      };
-    },
-
-    updateTime(): void {
-      this.interval = setInterval(() => this.cal?.updateTimes(), 60 * 1000);
-    },
-
-    stopUpdateTime(): void {
-      if (this.interval != undefined) {
-        clearInterval(this.interval);
-      }
     },
 
     setToday(): void {
@@ -199,18 +147,13 @@ export default Vue.component<Data, Methods, Computed, {}>("schedule", {
       return "rgba(25, 118, 210, 1)";
     },
 
-    getCurrentTime(): number {
-      return this.cal
-        ? this.cal.times.now.hour * 60 + this.cal.times.now.minute
-        : 0;
-    },
-
-    scrollToTime(): void {
-      const time = this.getCurrentTime();
-      const first = Math.max(0, time - (time % 30) - 30);
-
-      this.cal?.scrollToTime(first);
+    setTitle(title: string): void {
+      this.title = title;
     }
+  },
+  components: {
+    ScheduleCalendar,
+    CalendarToolbar
   }
 });
 </script>

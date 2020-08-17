@@ -1,11 +1,14 @@
 import { CalendarTimestamp } from "vuetify";
 import { DateTime } from "luxon";
 
+export interface CalendarTimes {
+  now: CalendarTimestamp;
+  today: CalendarTimestamp;
+}
+
 export interface VCalendar {
   title: string;
-  times: {
-    now: CalendarTimestamp;
-  };
+  times: CalendarTimes;
 
   timeToY(
     time: number | string | { hour: number; minute: number },
