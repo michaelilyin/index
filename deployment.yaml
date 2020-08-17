@@ -21,7 +21,7 @@ spec:
           - path: /($|.*)
             backend:
               serviceName: index
-              servicePort: 4000
+              servicePort: 3000
 
 
 ---
@@ -68,10 +68,10 @@ metadata:
   name: index
 spec:
   ports:
-  - name: 4000-4000
-    port: 4000
+  - name: 3000-3000
+    port: 3000
     protocol: TCP
-    targetPort: 4000
+    targetPort: 3000
   selector:
     app: index
   type: ClusterIP
